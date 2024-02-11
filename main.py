@@ -1,5 +1,10 @@
 import random
 
+class Color:
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    END = '\033[0m'
+
 def generateCards(deck):
     cards = [[], [], []]
     i = 0
@@ -16,15 +21,15 @@ def startRound(rounds, cards):
         return [card for sublist in cards for card in sublist]
 
     print('choose one of this cards:\n')
-    print('first row', cards[0])
-    print('second row', cards[1])
-    print('third row', cards[2], '\n')
+    print('first row ->', Color.GREEN, cards[0], Color.END)
+    print('second row ->', Color.GREEN, cards[1], Color.END)
+    print('third row ->', Color.GREEN, cards[2], Color.END, '\n')
 
-    row = int(input('which row is your letter on? 1, 2 ou 3?'))
+    row = int(input(Color.GREEN + 'which row is your card on? 1, 2 ou 3?' + Color.END))
     rowIsInvalid = row not in [1, 2, 3]
 
     if rowIsInvalid:
-        print('restart the program and select a valid row.')
+        print(Color.RED + 'restart the program and select a valid row.' + Color.END)
         exit()
 
     match row:
@@ -41,7 +46,7 @@ def startRound(rounds, cards):
 
     return startRound(rounds + 1, cards)
 
-print('''
+print(Color.GREEN + '''
 ┌──────────────────────────────────────────────────────────────┐
 │   ██████╗  ██╗     ██████╗ █████╗ ██████╗ ██████╗ ███████╗   │
 │    ╚════██╗███║    ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝  │
@@ -51,7 +56,7 @@ print('''
 │    ╚══════╝ ╚═╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝  │
 │    Created by @NotHiaki on Github                            │
 └──────────────────────────────────────────────────────────────┘                 
-''')
+''' + Color.END)
 
 suits = ['♥', '♠', '♣', '♦']
 values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -62,4 +67,4 @@ cards = generateCards(deck)
 
 rounds = 0
 res = startRound(rounds, cards)
-print('your card is', res[10])
+print(Color.GREEN + '''────────────\n     ''' + res[10] + '''\n────────────''' + Color.END)
