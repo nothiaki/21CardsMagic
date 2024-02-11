@@ -16,7 +16,11 @@ def generateCards(deck):
 
     return cards
 
-def startRound(rounds, cards):
+def startRound(rounds, cards, attempts = 0):
+    if attempts >= 3:
+        print(Color.RED + 'maximum number of attempts reached.' + Color.END)
+        exit()
+    
     if rounds > 2:
         return [card for sublist in cards for card in sublist]
 
@@ -25,26 +29,32 @@ def startRound(rounds, cards):
     print('second row ->', Color.GREEN, cards[1], Color.END)
     print('third row ->', Color.GREEN, cards[2], Color.END, '\n')
 
-    row = int(input(Color.GREEN + 'which row is your card on? 1, 2 ou 3?' + Color.END))
-    rowIsInvalid = row not in [1, 2, 3]
+    try:
+        row = int(input(Color.GREEN + 'which row is your card on? 1, 2 ou 3?' + Color.END))
+        rowIsInvalid = row not in [1, 2, 3]
 
-    if rowIsInvalid:
-        print(Color.RED + 'restart the program and select a valid row.' + Color.END)
+        if rowIsInvalid:
+            print(Color.RED + 'restart the program and select a valid row.' + Color.END)
+            exit()
+    
+        match row:
+            case 1:
+                cards[0], cards[1] = cards[1], cards[0]
+            case 2:
+                pass
+            case 3:
+                cards[1], cards[2] = cards[2], cards[1]
+
+        #transform [[], [], []] in []
+        deck = [card for sublist in cards for card in sublist]
+        cards = generateCards(deck)
+
+        return startRound(rounds + 1, cards)
+    except KeyboardInterrupt:
+        print(Color.RED + '\nProgram terminated by user.' + Color.END)
         exit()
-
-    match row:
-        case 1:
-            cards[0], cards[1] = cards[1], cards[0]
-        case 2:
-            pass
-        case 3:
-            cards[1], cards[2] = cards[2], cards[1]
-
-    #transform [[], [], []] in []
-    deck = [card for sublist in cards for card in sublist]
-    cards = generateCards(deck)
-
-    return startRound(rounds + 1, cards)
+    except:
+        return startRound(rounds, cards, attempts = attempts + 1)
 
 print(Color.GREEN + '''
 ┌──────────────────────────────────────────────────────────────┐
