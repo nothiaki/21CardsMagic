@@ -1,3 +1,16 @@
+import random
+
+def generateCards(deck):
+    cards = [[], [], []]
+    i = 0
+
+    while i < 21:
+        count = i%3
+        cards[count].append(deck[i])
+        i += 1
+
+    return cards
+
 def startRound(rounds, cards):
     if rounds > 2:
         return [card for sublist in cards for card in sublist]
@@ -23,20 +36,10 @@ def startRound(rounds, cards):
             cards[1], cards[2] = cards[2], cards[1]
 
     #transform [[], [], []] in []
-    cardsList = [card for sublist in cards for card in sublist]
-    cards = [[], [], []]
-
-    for i in range(len(cardsList)):
-        count = i%3
-        cards[count].append(cardsList[i])
+    deck = [card for sublist in cards for card in sublist]
+    cards = generateCards(deck)
 
     return startRound(rounds + 1, cards)
-
-cards = [
-    ['A♥', 'J♠', '9♣', '6♣', '3♠', 'Q♣', '5♣'],
-    ['6♦', '7♠', '8♠', '9♠', 'Q♠', 'J♦', 'K♠'],
-    ['A♦', '2♥', '3♦', 'A♠', '5♥', '4♥', '7♦']
-]
 
 print('''
 ┌──────────────────────────────────────────────────────────────┐
@@ -46,10 +49,17 @@ print('''
 │    ██╔═══╝  ██║    ██║     ██╔══██║██╔══██╗██║  ██║╚════██║  │
 │    ███████╗ ██║    ╚██████╗██║  ██║██║  ██║██████╔╝███████║  │
 │    ╚══════╝ ╚═╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝  │
-│    Created by @NotHiaki in Github                            │
+│    Created by @NotHiaki on Github                            │
 └──────────────────────────────────────────────────────────────┘                 
 ''')
 
+suits = ['♥', '♠', '♣', '♦']
+values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+deck = [value + suit for value in values for suit in suits]
+
+random.shuffle(deck)
+cards = generateCards(deck)
+
 rounds = 0
-x = startRound(rounds, cards)
-print('your card is', x[10])
+res = startRound(rounds, cards)
+print('your card is', res[10])
